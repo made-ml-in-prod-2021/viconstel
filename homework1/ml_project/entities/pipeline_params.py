@@ -16,6 +16,7 @@ class PipelineParams:
     output_preprocessor_path: str
     metric_path: str
     predictions_path: str
+    logging_config: str
     split_params: SplitParams
     feature_params: FeatureParams
     train_params: TrainingParams

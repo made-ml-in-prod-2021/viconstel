@@ -4,6 +4,7 @@ output_model_path: "models/model.pkl"
 output_preprocessor_path: "models/preprocessor.pkl"
 metric_path: "models/metrics.json"
 predictions_path: "data/predictions.csv"
+logging_config: "configs/logging_conf.yml"
 split_params:
   val_size: 0.2
   random_state: 3

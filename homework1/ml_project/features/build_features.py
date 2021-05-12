@@ -19,12 +19,16 @@ class CustomStandardScaler:
 
     def fit(self, data, y=None):
         """Compute mean and standard deviation over input data."""
-        self.mean = np.mean(data)
-        self.std = np.std(data)
+        if isinstance(data, pd.DataFrame):
+            data = data.to_numpy()
+        self.mean = np.mean(data, axis=0)
+        self.std = np.std(data, axis=0)
 
     def transform(self, data):
         """Perform standard scaling on input data."""
         data -= self.mean
+        if 0.0 in self.std:
+            self.std = np.where(self.std == 0.0, 1.0, self.std)
         data /= self.std
         return data
 

@@ -65,7 +65,7 @@ feature_params:
 ```
 
 Для запуска обучения логистической регрессии в режиме обучения или валидации
-выполните следующие команды с соответствующим аргументом:
+выполните следующие команды с соответствующими аргументами:
 ```
 python ml_project\run_pipeline.py configs\logreg_config.yml train 
 ```
@@ -73,12 +73,17 @@ python ml_project\run_pipeline.py configs\logreg_config.yml train
 python ml_project\run_pipeline.py configs\logreg_config.yml val
 ```
 Для запуска обучения модели k-NN в режиме обучения или валидации
-выполните следующие команды с соответствующим аргументом:
+выполните следующие команды с соответствующими аргументами:
 ```
 python ml_project\run_pipeline.py configs\knn_config.yml train 
 ```
 ```
 python ml_project\run_pipeline.py configs\knn_config.yml val
+```
+Возможен запуск без аргументов (дефолтные значения: `config_path=configs\logreg_config.yml`,
+`train_val=train`)
+```
+python ml_project\run_pipeline.py
 ```
 При запуске с аргументом `train` модель обучится и соответствующие артефакты обучения
 (модель,

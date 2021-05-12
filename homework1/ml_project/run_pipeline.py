@@ -83,11 +83,12 @@ def validate_pipeline(params: PipelineParams) -> None:
 
 
 @click.command(name="train_pipeline")
-@click.argument("config_path")
-@click.argument("train_val")
+@click.argument("config_path", default=r'configs\logreg_config.yml')
+@click.argument("train_val", default='train')
 def train_pipeline_command(config_path: str, train_val: str) -> None:
     params = read_pipeline_params(config_path)
     setup_logging(params.logging_config)
+    logger.info(f'Get config file: {config_path}')
     if train_val == "train":
         logger.info("Run app in train mode")
         train_pipeline(params)

@@ -1,15 +1,13 @@
-import sys
 import os
-ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(ROOT_DIR, 'ml_project'))
-import pytest
+
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 
-from features import CustomStandardScaler
+from ml_project.features import CustomStandardScaler
 
 
+ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
 TRAIN_DATA_PATH = r'data\heart.csv'
 TEST_DATA_PATH = r'data\test_sample.csv'
 

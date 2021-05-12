@@ -32,3 +32,32 @@ def test_custom_standard_scaler():
     assert np.allclose(sklearn_test_data, custom_test_data.to_numpy()), (
         'Different results with sklearn and custom scaler on test data.'
     )
+
+
+def test_custom_standard_scaler_zero_variance():
+    sklearn_scaler = StandardScaler()
+    custom_scaler = CustomStandardScaler()
+
+    multi_column_df = pd.DataFrame({'col1': np.ones(7), 'col2': 5 * np.ones(7)})
+    sklearn_data = sklearn_scaler.fit_transform(multi_column_df)
+    custom_data = custom_scaler.fit_transform(multi_column_df)
+
+    assert np.allclose(sklearn_data, custom_data.to_numpy()), (
+        'Dataframe with multiple constant columns processed incorrectly.'
+    )
+
+    single_column_df = pd.DataFrame({'col1': np.ones(10)})
+    sklearn_data = sklearn_scaler.fit_transform(single_column_df)
+    custom_data = custom_scaler.fit_transform(single_column_df)
+
+    assert np.allclose(sklearn_data, custom_data.to_numpy()), (
+        'Dataframe with single constant columns processed incorrectly.'
+    )
+
+    mixed_column_df = pd.DataFrame({'col1': np.ones(10), 'col2': np.arange(10)})
+    sklearn_data = sklearn_scaler.fit_transform(mixed_column_df)
+    custom_data = custom_scaler.fit_transform(mixed_column_df)
+
+    assert np.allclose(sklearn_data, custom_data.to_numpy()), (
+        'Dataframe with constant and non-constant columns processed incorrectly.'
+    )

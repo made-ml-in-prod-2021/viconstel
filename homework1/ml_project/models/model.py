@@ -18,7 +18,7 @@ def initialize_model(
     if params.model_type == 'LogisticRegression':
         model = LogisticRegression(
             penalty=params.penalty,
-            C=params.C,
+            C=params.inverse_regularization_strength,
             fit_intercept=params.fit_intercept,
             solver=params.solver,
             max_iter=params.max_iter,

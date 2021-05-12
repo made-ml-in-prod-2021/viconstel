@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 @dataclass()
 class TrainingParams:
     penalty: Optional[str]
-    C: Optional[float]
+    inverse_regularization_strength: Optional[float]
     fit_intercept: Optional[bool]
     solver: Optional[str]
     max_iter: Optional[int]

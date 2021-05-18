@@ -71,7 +71,7 @@ def validate_pipeline(params: PipelineParams) -> None:
     data_preprocessor.load_pipeline(params.output_preprocessor_path)
     logger.info(f'Loaded data preprocessor from file: '
                 f'{params.output_preprocessor_path}')
-    model = load_model(params.output_model_path, params.train_params)
+    model = load_model(params.output_model_path)
     logger.info(f'Loaded model from file: {params.output_model_path}')
     # Make predictions and save it to CSV file
     data = data_preprocessor.transform(data)

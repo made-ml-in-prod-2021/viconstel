@@ -68,11 +68,8 @@ def save_model(model: Union[LogisticRegression, KNeighborsClassifier],
         pickle.dump(model, file)
 
 
-def load_model(
-        file_path: str, params: TrainingParams
-) -> Union[LogisticRegression, KNeighborsClassifier]:
+def load_model(file_path: str) -> Union[LogisticRegression, KNeighborsClassifier]:
     """Load pre-trained model from the hard drive."""
-    model = initialize_model(params)
     with open(file_path, 'rb') as file:
         model = pickle.load(file)
     return model

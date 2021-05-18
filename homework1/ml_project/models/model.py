@@ -8,7 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score
 
-from entities import TrainingParams
+from ml_project.entities import TrainingParams
 
 
 def initialize_model(

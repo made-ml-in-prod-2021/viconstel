@@ -4,11 +4,11 @@ import click
 import yaml
 import pandas as pd
 
-from entities import read_pipeline_params, PipelineParams
-from data import read_data, split_train_val_data
-from features import PreprocessingPipeline
-from models import (train_model, evaluate_model, save_model,
-                     predict_model, save_metrics, load_model)
+from ml_project.entities import read_pipeline_params, PipelineParams
+from ml_project.data import read_data, split_train_val_data
+from ml_project.features import PreprocessingPipeline
+from ml_project.models import (train_model, evaluate_model, save_model,
+                               predict_model, save_metrics, load_model)
 
 
 logger = logging.getLogger('homework1')

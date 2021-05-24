@@ -9,5 +9,6 @@ setup(
     version="0.1.0",
     description="Heart Disease UCI Classification",
     author="viconstel",
+    include_package_data=True,
     install_reqs=requirements
 )

@@ -11,6 +11,7 @@ cycler==0.10.0
 decorator==5.0.9
 defusedxml==0.7.1
 entrypoints==0.3
+fastapi==0.65.1
 importlib-metadata==4.0.1
 iniconfig==1.1.1
 ipykernel==5.5.5
@@ -34,7 +35,6 @@ marshmallow-dataclass==8.4.1
 matplotlib==3.4.2
 matplotlib-inline==0.1.2
 mistune==0.8.4
--e git+https://github.com/made-ml-in-prod-2021/viconstel.git@f7bdb400c80c8cfdf30a4d9f5582c2d2c42eb96a#egg=ml_project&subdirectory=homework1
 mypy-extensions==0.4.3
 nbclient==0.5.3
 nbconvert==6.0.7
@@ -53,18 +53,18 @@ prometheus-client==0.10.1
 prompt-toolkit==3.0.18
 py==1.10.0
 pycparser==2.20
+pydantic==1.8.2
 Pygments==2.9.0
 pyparsing==2.4.7
 pyrsistent==0.17.3
 pytest==6.2.4
 python-dateutil==2.8.1
 pytz==2021.1
-pywin32==300
-pywinpty==0.5.7
 PyYAML==5.4.1
 pyzmq==22.0.3
 qtconsole==5.1.0
 QtPy==1.9.0
+requests==2.25.1
 ruamel.appconfig==0.5.5
 ruamel.std.argparse==0.8.3
 scikit-learn==0.24.2
@@ -81,6 +81,7 @@ tornado==6.1
 traitlets==5.0.5
 typing-extensions==3.10.0.0
 typing-inspect==0.6.0
+uvicorn==0.13.4
 wcwidth==0.2.5
 webencodings==0.5.1
 widgetsnbextension==3.5.1

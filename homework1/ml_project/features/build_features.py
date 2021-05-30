@@ -89,10 +89,13 @@ class PreprocessingPipeline:
         """Apply fitted preprocessing pipeline on the input data."""
         return pd.DataFrame(self.pipeline.transform(data))
 
-    def save_pipeline(self, file_path: str) -> None:
-        """Save fitted preprocessing pipeline on the hard drive."""
-        joblib.dump(self.pipeline, file_path)
 
-    def load_pipeline(self, file_path: str) -> None:
-        """Load fitted preprocessing pipeline from the hard drive."""
-        self.pipeline = joblib.load(file_path)
+def save_pipeline(pipeline: PreprocessingPipeline, file_path: str) -> None:
+    """Save fitted preprocessing pipeline on the hard drive."""
+    joblib.dump(pipeline, file_path)
+
+
+def load_pipeline(file_path: str) -> PreprocessingPipeline:
+    """Load fitted preprocessing pipeline from the hard drive."""
+    pipeline = joblib.load(file_path)
+    return pipeline

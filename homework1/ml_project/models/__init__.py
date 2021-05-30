@@ -1,6 +1,5 @@
 from .model import (
-    train_model,
-    predict_model,
+    CustomModel,
     evaluate_model,
     save_model,
     save_metrics,
@@ -8,8 +7,7 @@ from .model import (
 )
 
 __all__ = [
-    "train_model",
-    "predict_model",
+    "CustomModel",
     "evaluate_model",
     "save_model",
     "save_metrics",

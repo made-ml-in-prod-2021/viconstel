@@ -3,50 +3,21 @@ from fastapi.testclient import TestClient
 
 from online_inference import app
 
-CORRECT_DATA_SAMPLE = [
-    {
-        'age': 0,
-        'sex': 0,
-        'cp': 0,
-        'trestbps': 0,
-        'chol': 0,
-        'fbs': 0,
-        'restecg': 0,
-        'thalach': 0,
-        'exang': 0,
-        'oldpeak': 0,
-        'slope': 0,
-        'ca': 0,
-        'thal': 0,
-    },
-    {
-        'age': 1,
-        'sex': 1,
-        'cp': 1,
-        'trestbps': 1,
-        'chol': 1,
-        'fbs': 1,
-        'restecg': 1,
-        'thalach': 1,
-        'exang': 1,
-        'oldpeak': 1,
-        'slope': 1,
-        'ca': 1,
-        'thal': 1,
-    }
-]
-INVALID_DATA_SAMPLE = [
-  {
-    'sex': 0,
-    'cp': 0,
-    'chol': 0,
-    'fbs': 0,
-    'restecg': 0,
-    'slope': 0,
-    'ca': 0,
-    'thal': {1: 2},
-  }
-]
+
+@pytest.fixture()
+def correct_data_sample():
+    columns = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg',
+               'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
+
+    return [dict.fromkeys(columns, 0), dict.fromkeys(columns, 1)]
+
+
+@pytest.fixture()
+def invalid_data_sample():
+    columns = ['sex', 'cp', 'chol', 'fbs', 'restecg', 'slope', 'ca']
+    invalid_dict = dict.fromkeys(columns, 0)
+    invalid_dict['thal'] = {1: 2}
+    return [invalid_dict]
 
 
 @pytest.fixture()
@@ -86,8 +57,8 @@ def test_app_invalid_endpoint(client) -> None:
     )
 
 
-def test_app_correct_prediction_request(client) -> None:
-    response = client.get("/predict", json=CORRECT_DATA_SAMPLE)
+def test_app_correct_prediction_request(client, correct_data_sample) -> None:
+    response = client.get("/predict", json=correct_data_sample)
     assert response.status_code == 200, (
         'Invalid status code for endpoint `/predict`'
     )
@@ -113,8 +84,8 @@ def test_app_correct_prediction_request(client) -> None:
     )
 
 
-def test_app_invalid_prediction_request(client) -> None:
-    response = client.get("/predict", json=INVALID_DATA_SAMPLE)
+def test_app_invalid_prediction_request(client, invalid_data_sample) -> None:
+    response = client.get("/predict", json=invalid_data_sample)
     assert response.status_code >= 400, (
         'Invalid status code for endpoint `/predict`'
     )

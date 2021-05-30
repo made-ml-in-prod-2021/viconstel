@@ -1,25 +1,19 @@
 import os
-from typing import List, Optional, Union
+import joblib
+from typing import List
 
 import uvicorn
 import pandas as pd
 from pydantic import BaseModel
 from fastapi import FastAPI
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-
-from ml_project.entities import read_pipeline_params
-from ml_project.features import PreprocessingPipeline
-from ml_project.models import predict_model, load_model
 
 
-ROOT_DIR = '../homework1'
-CONFIG_PATH = r'configs/logreg_config.yml'
+PATH_TO_MODEL = '../homework1/models/model.pkl'
+PATH_TO_PREPROCESSOR = '../homework1/models/preprocessor.pkl'
 
 
-model: Optional[Union[LogisticRegression, KNeighborsClassifier]] = None
-preprocessor: Optional[Pipeline] = None
+model = None
+preprocessor = None
 
 
 class RequestResponse(BaseModel):
@@ -43,6 +37,11 @@ class InputData(BaseModel):
     thal: int
 
 
+def read_pickle(filepath: str):
+    obj = joblib.load(filepath)
+    return obj
+
+
 def make_dataframe(data: List[InputData]) -> pd.DataFrame:
     """Build pd.Dataframe from input data."""
     df = pd.DataFrame(columns=list(InputData.__fields__.keys()))
@@ -54,7 +53,7 @@ def make_dataframe(data: List[InputData]) -> pd.DataFrame:
 def make_prediction(data: pd.DataFrame) -> List[RequestResponse]:
     """Make prediction for input data and build REST response."""
     processed_data = preprocessor.transform(data)
-    predictions = predict_model(model, processed_data)
+    predictions = model.predict_model(processed_data)
     response = []
     for i in data.index:
         response.append(RequestResponse(id=i, prediction=predictions[i]))
@@ -68,15 +67,12 @@ app = FastAPI(title='Heart Disease Classifier')
 def load_model_and_preprocessor() -> None:
     """Initial loading of classifier model and data preprocessor."""
     global model, preprocessor
-    params = read_pipeline_params(os.path.join(ROOT_DIR, CONFIG_PATH))
-    model_path = os.path.join(ROOT_DIR, params.output_model_path)
-    model = load_model(model_path)
-    preproc_path = os.path.join(ROOT_DIR, params.output_preprocessor_path)
-    preprocessor = PreprocessingPipeline(
-        params.feature_params.categorical_features,
-        params.feature_params.numerical_features
-    )
-    preprocessor.load_pipeline(preproc_path)
+    model_path = os.getenv("PATH_TO_MODEL") \
+        if os.getenv("PATH_TO_MODEL") else PATH_TO_MODEL
+    model = read_pickle(model_path)
+    preproc_path = os.getenv("PATH_TO_PREPROCESSOR") \
+        if os.getenv("PATH_TO_PREPROCESSOR") else PATH_TO_PREPROCESSOR
+    preprocessor = read_pickle(preproc_path)
 
 
 @app.get("/")

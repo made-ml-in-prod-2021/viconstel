@@ -6,9 +6,10 @@ import pandas as pd
 
 from ml_project.entities import read_pipeline_params, PipelineParams
 from ml_project.data import read_data, split_train_val_data
-from ml_project.features import PreprocessingPipeline
-from ml_project.models import (train_model, evaluate_model, save_model,
-                               predict_model, save_metrics, load_model)
+from ml_project.features import (PreprocessingPipeline, save_pipeline,
+                                 load_pipeline)
+from ml_project.models import (CustomModel, evaluate_model, save_model,
+                               save_metrics, load_model)
 
 
 logger = logging.getLogger('homework1')
@@ -39,19 +40,20 @@ def train_pipeline(params: PipelineParams) -> None:
     x_train = data_preprocessor.transform(x_train)
     logger.info('Train data preprocessing done')
     # Train model
-    model = train_model(x_train, y_train, params.train_params)
+    model = CustomModel(params.train_params)
+    model.train_model(x_train, y_train)
     logger.info('Model training finished')
     # Validate model
     x_val = val_data[features]
     y_val = val_data[params.feature_params.target]
     x_val = data_preprocessor.transform(x_val)
-    predictions = predict_model(model, x_val)
+    predictions = model.predict_model(x_val)
     metrics = evaluate_model(predictions, y_val)
     logger.info(f'Evaluated metrics on the validation subset: {metrics}')
     # Save artifacts to files
     save_model(model, params.output_model_path)
     logger.info(f'Model saved in file: {params.output_model_path}')
-    data_preprocessor.save_pipeline(params.output_preprocessor_path)
+    save_pipeline(data_preprocessor, params.output_preprocessor_path)
     logger.info(f'Data preprocessor saved in file: '
                 f'{params.output_preprocessor_path}')
     save_metrics(metrics, params.metric_path)
@@ -63,19 +65,15 @@ def validate_pipeline(params: PipelineParams) -> None:
     # Read data
     data = read_data(params.input_test_data_path)
     logger.info(f'Loaded data from file: {params.input_test_data_path}')
-    data_preprocessor = PreprocessingPipeline(
-        params.feature_params.categorical_features,
-        params.feature_params.numerical_features
-    )
     # Load artifacts
-    data_preprocessor.load_pipeline(params.output_preprocessor_path)
+    data_preprocessor = load_pipeline(params.output_preprocessor_path)
     logger.info(f'Loaded data preprocessor from file: '
                 f'{params.output_preprocessor_path}')
     model = load_model(params.output_model_path)
     logger.info(f'Loaded model from file: {params.output_model_path}')
     # Make predictions and save it to CSV file
     data = data_preprocessor.transform(data)
-    predictions = predict_model(model, data)
+    predictions = model.predict_model(data)
     logger.info('Get model predictions for input data')
     predictions_df = pd.DataFrame({'predictions': predictions})
     predictions_df.to_csv(params.predictions_path, index=False)

@@ -1,6 +1,8 @@
 import os
+import time
 import joblib
 from typing import List
+from datetime import datetime
 
 import uvicorn
 import pandas as pd
@@ -10,6 +12,8 @@ from fastapi import FastAPI
 
 PATH_TO_MODEL = '../homework1/models/model.pkl'
 PATH_TO_PREPROCESSOR = '../homework1/models/preprocessor.pkl'
+START_DELAY = 30
+WORK_TIME = 60
 
 
 model = None
@@ -60,6 +64,7 @@ def make_prediction(data: pd.DataFrame) -> List[RequestResponse]:
     return response
 
 
+start_time = datetime.now()
 app = FastAPI(title='Heart Disease Classifier')
 
 
@@ -67,6 +72,7 @@ app = FastAPI(title='Heart Disease Classifier')
 def load_model_and_preprocessor() -> None:
     """Initial loading of classifier model and data preprocessor."""
     global model, preprocessor
+    time.sleep(START_DELAY)
     model_path = os.getenv("PATH_TO_MODEL") \
         if os.getenv("PATH_TO_MODEL") else PATH_TO_MODEL
     model = read_pickle(model_path)
@@ -85,6 +91,8 @@ def main() -> str:
     description='Check model and preprocessor health'
 )
 def health() -> bool:
+    if (datetime.now() - start_time).seconds > WORK_TIME:
+        raise OSError('Application stop')
     return not (model is None and preprocessor is None)
 
 
